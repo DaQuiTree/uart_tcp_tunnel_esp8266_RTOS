@@ -1,0 +1,60 @@
+menu "Example Configuration"
+
+choice EXAMPLE_IP_MODE
+    prompt "IP Version"
+    help
+       Example can use either IPV4 or IPV6.
+
+config EXAMPLE_IPV4
+    bool "IPV4"
+
+config EXAMPLE_IPV6
+   select EXAMPLE_CONNECT_IPV6
+   bool "IPV6"
+
+endchoice
+
+config EXAMPLE_IPV4_ADDR
+    string "IPV4 Address"
+    default "192.168.0.165"
+    depends on EXAMPLE_IPV4
+    help
+       The example will connect to this IPV4 address.
+
+config EXAMPLE_IPV6_ADDR
+    string "IPV6 Address"
+    default "FE80::30AD:E57B:C212:68AD"
+    depends on EXAMPLE_IPV6
+    help
+       The example will connect to this IPV6 address.
+
+config EXAMPLE_PORT
+    int "Port"
+    range 0 65535
+    default 3333
+    help
+        The remote port to which the client example will connect to.
+
+choice ESP_SMARTCONFIG_TYPE
+        prompt "Smartconfig Type"
+        default ESP_TOUCH
+        help
+
+config ESP_TOUCH
+        bool "ESPTouch"
+config AIRKISS
+        bool "AirKiss"
+config ESP_TOUCH-AIRKISS
+        bool "ESPTouch and AirKiss"
+config ESP_TOUCH_V2
+        bool "ESPTouch-V2"
+endchoice
+
+config ESP_SMARTCONFIG_TYPE
+        int
+        default 0 if ESP_TOUCH
+        default 1 if AIRKISS
+        default 2 if ESP_TOUCH-AIRKISS
+        default 3 if ESP_TOUCH_V2
+
+endmenu
