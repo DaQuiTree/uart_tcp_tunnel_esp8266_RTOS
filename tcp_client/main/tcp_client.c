@@ -272,10 +272,13 @@ static void tcp_client_recv_task(void *pvParameters)
                 socket_change_state(notReadyCode, 2000, 0);
                 ESP_LOGE(TAG, "recv failed: errno %d", errno);
             }else {
-	        rx_buffer[len++] = 0x0D; // Null-terminate whatever we received and treat like a string
+                //rx_buffer[len++] = 0x0D; // Null-terminate whatever we received and treat like a string
                 rx_buffer[len++] = 0x0A;
-                uart_write_bytes(UART_NUM_0, rx_buffer, len);
-                //ESP_LOGI(TAG, "Received %d bytes %s", len, rx_buffer);
+                for(int i = 0; i < len; i++){
+                    uart_write_bytes(UART_NUM_0, rx_buffer+i, 1);
+                    vTaskDelay(100 / portTICK_PERIOD_MS);
+                    //ESP_LOGI(TAG, "Received %c", *(rx_buffer+i));
+                }
             }
         }
         vTaskDelay(100 / portTICK_PERIOD_MS);
